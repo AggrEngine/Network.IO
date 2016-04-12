@@ -1,13 +1,16 @@
-﻿using System.Reflection;
+﻿// Copyright (c) AggrEngine. All rights reserved.
+// Licensed under the Apache License, Version 2.0. See License in the project root for license information.
+
+using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
 [assembly: AssemblyTitle("NetworkIO")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("NetworkIO")]
-[assembly: AssemblyCopyright("Copyright ©  2016")]
+[assembly: AssemblyCompany("aggrengine.com")]
+[assembly: AssemblyProduct("AggrEngine NetworkIO")]
+[assembly: AssemblyCopyright("Copyright (c) AggrEngine. All rights reserved.")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
