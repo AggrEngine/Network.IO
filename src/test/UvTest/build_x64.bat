@@ -1,0 +1,1 @@
+copy /y ..\..\lib\libuv\win7-x64\native\libuv.dll  .\bin\debug\
