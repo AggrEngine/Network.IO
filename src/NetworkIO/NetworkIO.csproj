@@ -51,6 +51,9 @@
     <Compile Include="Filter\FilteredStreamAdapter.cs" />
     <Compile Include="Filter\IConnectionFilter.cs" />
     <Compile Include="Filter\LibuvStream.cs" />
+    <Compile Include="Filter\LoggingConnectionFilter.cs" />
+    <Compile Include="Filter\LoggingStream.cs" />
+    <Compile Include="Filter\NoOpConnectionFilter.cs" />
     <Compile Include="Filter\SocketInputStream.cs" />
     <Compile Include="Filter\StreamExtensions.cs" />
     <Compile Include="Filter\StreamSocketOutput.cs" />

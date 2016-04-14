@@ -1,4 +1,5 @@
 ﻿using AggrEngine.NetworkIO;
+using Microsoft.AspNetCore.Server.Kestrel.Filter;
 using Microsoft.AspNetCore.Server.Kestrel.Http;
 using Microsoft.AspNetCore.Server.Kestrel.Infrastructure;
 using System;
@@ -89,16 +90,19 @@ namespace UvTest
                 AppLifetime = new AppLifetime(log),
                 Log = log,
                 ThreadPool = new LoggingThreadPool(log),
-                ServerInformation = new NetworkConfigure() {
+                ServerInformation = new NetworkConfigure()
+                {
                     NoDelay = true,
-                    ShutdownTimeout = new TimeSpan(0, 0, 1)
+                    ShutdownTimeout = new TimeSpan(0, 0, 1),
+                    ConnectionFilter = new ConnectFilter(log, new LoggingConnectionFilter(log, new NoOpConnectionFilter()))
                 }
             });
             listener.Start(1);
-            var started = listener.CreateServer(new NetworkAddress() {
-                Host = "127.0.0.1",
-                Port = 5300
-            });
+            //var started = listener.CreateServer(new NetworkAddress() {
+            //    Host = "127.0.0.1",
+            //    Port = 5300
+            //});
+            var started = listener.CreateServer(NetworkAddress.FromUrl("http://127.0.0.1:5300/"));
             Console.Write("Iput enter is exit.");
             Console.ReadLine();
             started.Dispose();
@@ -106,6 +110,25 @@ namespace UvTest
         }
     }
 
+    public class ConnectFilter : IConnectionFilter
+    {
+        private ILoggerBase _log;
+        private IConnectionFilter _prev;
+
+        public ConnectFilter(ILoggerBase log, IConnectionFilter prev)
+        {
+            _log = log;
+            _prev = prev;
+        }
+        public async Task OnConnectionAsync(ConnectionFilterContext context)
+        {
+            await _prev.OnConnectionAsync(context);
+
+            //string url = context.Address.ToString();
+            //_log.Debug(0, "connect:" + url);
+
+        }
+    }
     public class AppLifetime : IApplicationLifetime
     {
         private ILoggerBase _log;

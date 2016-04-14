@@ -73,17 +73,21 @@ namespace AggrEngine.NetworkIO
             Console.WriteLine("{0} [INFO]-{1} {2}", NowString, eventId, formatter(state));
             Console.ResetColor();
         }
-
         public void Warning(int eventId, object state)
         {
-            Warning(eventId, state, arg => arg.ToString());
+            Warning(eventId, state, null);
         }
 
-        public virtual void Warning(int eventId, object state, Func<object, string> formatter)
+        public void Warning(int eventId, object state, Exception exception)
+        {
+            Warning(eventId, state, exception, (arg, ex) => arg.ToString() + Environment.NewLine + ex);
+        }
+
+        public virtual void Warning(int eventId, object state, Exception exception, Func<object, Exception, string> formatter)
         {
             if (!IsEnabled(warningLevel)) return;
             Console.ForegroundColor = ConsoleColor.Yellow;
-            Console.WriteLine("{0} [WARNING]-{1} {2}", NowString, eventId, formatter(state));
+            Console.WriteLine("{0} [WARNING]-{1} {2}", NowString, eventId, formatter(state, exception));
             Console.ResetColor();
         }
         public void Error(int eventId, object state, Exception exception)

@@ -55,19 +55,20 @@ namespace AggrEngine.NetworkIO
         /// <param name="state"></param>
         /// <param name="formatter"></param>
         void Info(int eventId, object state, Func<object, string> formatter);
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="eventId"></param>
-        /// <param name="state"></param>
         void Warning(int eventId, object state);
         /// <summary>
         /// 
         /// </summary>
         /// <param name="eventId"></param>
         /// <param name="state"></param>
+        void Warning(int eventId, object state, Exception exception);
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="eventId"></param>
+        /// <param name="state"></param>
         /// <param name="formatter"></param>
-        void Warning(int eventId, object state, Func<object, string> formatter);
+        void Warning(int eventId, object state, Exception exception, Func<object, Exception, string> formatter);
         /// <summary>
         /// 
         /// </summary>
