@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Server.Kestrel.Http;
 using System.Collections;
 using System.Collections.Generic;
+using System.Security.Cryptography.X509Certificates;
 
 namespace AggrEngine.NetworkIO
 {
@@ -124,6 +125,20 @@ namespace AggrEngine.NetworkIO
     {
 
     }
+    class TlsConnectionFeature : ITlsConnectionFeature
+    {
+        public X509Certificate2 ClientCertificate
+        {
+            get;
+            set;
+        }
+
+        public Task<X509Certificate2> GetClientCertificateAsync(CancellationToken cancellationToken)
+        {
+            return Task.FromResult<X509Certificate2>(this.ClientCertificate);
+        }
+    }
+
     public interface IHttpWebSocketFeature
     {
 

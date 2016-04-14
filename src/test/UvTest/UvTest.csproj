@@ -49,6 +49,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+    <None Include="testCert.pfx" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\NetworkIO\NetworkIO.csproj">

@@ -4,7 +4,9 @@ using Microsoft.AspNetCore.Server.Kestrel.Http;
 using Microsoft.AspNetCore.Server.Kestrel.Infrastructure;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -86,6 +88,8 @@ namespace UvTest
                 context.Write(Encoding.UTF8.GetBytes("SUCCESS"));
                 return TaskUtilities.CompletedTask;
             });
+
+           
             var listener = new AsyncNetworkHost(new ServiceContext
             {
                 FrameFactory = context =>
@@ -103,12 +107,22 @@ namespace UvTest
                 },
                 DateHeaderValueManager = new DateHeaderValueManager()
             });
+
+            var testCertPath = Path.Combine(AppDomain.CurrentDomain.SetupInformation.ApplicationBase,"../../", "testCert.pfx");
+            if (File.Exists(testCertPath))
+            {
+                listener.UseKestrelHttps(new X509Certificate2(testCertPath, "testPassword"));
+            }
+            else
+            {
+                log.Error(0, string.Format("Could not find certificate at '{0}'. HTTPS is not enabled.", testCertPath), new Exception());
+            }
             listener.Start(1);
             //var started = listener.CreateServer(new NetworkAddress() {
             //    Host = "127.0.0.1",
             //    Port = 5300
             //});
-            var started = listener.CreateServer(NetworkAddress.FromUrl("http://127.0.0.1:5300/"));
+            var started = listener.CreateServer(NetworkAddress.FromUrl("https://127.0.0.1:5300/"));
             Console.Write("Iput enter is exit.");
             Console.ReadLine();
             started.Dispose();

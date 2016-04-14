@@ -14,8 +14,22 @@ namespace AggrEngine.NetworkIO
     /// <summary>
     /// 
     /// </summary>
-    public class AsyncNetworkHost : IDisposable
+    public class AsyncNetworkHost : IApplicationBuilder, IDisposable
     {
+        class Server : IServerFeatures
+        {
+            private ServiceContext _context;
+
+            public Server(ServiceContext _context)
+            {
+                this._context = _context;
+            }
+
+            public T Get<T>() where T : NetworkConfigure
+            {
+                return _context.ServerInformation as T;
+            }
+        }
         private readonly Libuv _uv;
         private readonly ServiceContext _context;
         internal readonly IApplicationLifetime _appLifetime;
@@ -26,6 +40,7 @@ namespace AggrEngine.NetworkIO
             _appLifetime = context.AppLifetime;
             Threads = new List<KestrelThread>();
             _context = context;
+            ServerFeatures = new Server(_context);
         }
 
         internal List<KestrelThread> Threads { get; private set; }
@@ -33,6 +48,18 @@ namespace AggrEngine.NetworkIO
 
         public ILoggerBase Log { get; internal set; }
         public IThreadPool ThreadPool { get; internal set; }
+
+        public IRequiredService ApplicationServices
+        {
+            get;
+            set;
+        }
+
+        public IServerFeatures ServerFeatures
+        {
+            get;
+            set;
+        }
 
         public void Start(int count)
         {

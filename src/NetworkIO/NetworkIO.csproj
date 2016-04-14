@@ -64,6 +64,10 @@
     <Compile Include="Filter\SocketInputStream.cs" />
     <Compile Include="Filter\StreamExtensions.cs" />
     <Compile Include="Filter\StreamSocketOutput.cs" />
+    <Compile Include="Https\ClientCertificateMode.cs" />
+    <Compile Include="Https\HttpsApplicationBuilderExtensions.cs" />
+    <Compile Include="Https\HttpsConnectionFilter.cs" />
+    <Compile Include="Https\HttpsConnectionFilterOptions.cs" />
     <Compile Include="Http\ChunkWriter.cs" />
     <Compile Include="Http\Connection.cs" />
     <Compile Include="Http\ConnectionContext.cs" />
