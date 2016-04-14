@@ -32,7 +32,13 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Microsoft.Extensions.Primitives">
+      <HintPath>..\lib\dotnet\Microsoft.Extensions.Primitives.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
+    <Reference Include="System.Buffers">
+      <HintPath>..\lib\dotnet\System.Buffers.dll</HintPath>
+    </Reference>
     <Reference Include="System.Core" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Numerics.Vectors">
@@ -52,6 +58,7 @@
     <Compile Include="Filter\IConnectionFilter.cs" />
     <Compile Include="Filter\LibuvStream.cs" />
     <Compile Include="Filter\LoggingConnectionFilter.cs" />
+    <Compile Include="Filter\LoggingFilterApplicationBuilderExtensions.cs" />
     <Compile Include="Filter\LoggingStream.cs" />
     <Compile Include="Filter\NoOpConnectionFilter.cs" />
     <Compile Include="Filter\SocketInputStream.cs" />
@@ -61,7 +68,20 @@
     <Compile Include="Http\Connection.cs" />
     <Compile Include="Http\ConnectionContext.cs" />
     <Compile Include="Http\ConnectionManager.cs" />
+    <Compile Include="Http\DateHeaderValueManager.cs" />
+    <Compile Include="Http\Frame.cs" />
+    <Compile Include="Http\Frame.FeatureCollection.cs" />
+    <Compile Include="Http\Frame.Generated.cs" />
     <Compile Include="Http\FrameContext.cs" />
+    <Compile Include="Http\FrameDuplexStream.cs" />
+    <Compile Include="Http\FrameHeaders.cs" />
+    <Compile Include="Http\FrameHeaders.Generated.cs" />
+    <Compile Include="Http\FrameOfT.cs" />
+    <Compile Include="Http\FrameRequestHeaders.cs" />
+    <Compile Include="Http\FrameRequestStream.cs" />
+    <Compile Include="Http\FrameResponseHeaders.cs" />
+    <Compile Include="Http\FrameResponseStream.cs" />
+    <Compile Include="Http\FrameStreamState.cs" />
     <Compile Include="Http\IAsyncDisposable.cs" />
     <Compile Include="Http\IConnectionControl.cs" />
     <Compile Include="Http\IFrameControl.cs" />
@@ -70,11 +90,13 @@
     <Compile Include="Http\ListenerContext.cs" />
     <Compile Include="Http\ListenerPrimary.cs" />
     <Compile Include="Http\ListenerSecondary.cs" />
+    <Compile Include="Http\MessageBody.cs" />
     <Compile Include="Http\PathNormalizer.cs" />
     <Compile Include="Http\PipeListener.cs" />
     <Compile Include="Http\PipeListenerPrimary.cs" />
     <Compile Include="Http\PipeListenerSecondary.cs" />
     <Compile Include="Http\ProduceEndType.cs" />
+    <Compile Include="Http\ReasonPhrases.cs" />
     <Compile Include="Http\SocketInput.cs" />
     <Compile Include="Http\SocketInputExtensions.cs" />
     <Compile Include="Http\SocketOutput.cs" />
@@ -82,9 +104,13 @@
     <Compile Include="Http\TcpListenerPrimary.cs" />
     <Compile Include="Http\TcpListenerSecondary.cs" />
     <Compile Include="Http\UrlPathDecoder.cs" />
+    <Compile Include="IApplicationBuilder.cs" />
     <Compile Include="IApplicationLifetime.cs" />
     <Compile Include="Infrastructure\Constants.cs" />
     <Compile Include="Infrastructure\Disposable.cs" />
+    <Compile Include="Infrastructure\HttpComponentFactory.cs" />
+    <Compile Include="Infrastructure\IHttpComponentFactory.cs" />
+    <Compile Include="Infrastructure\ISystemClock.cs" />
     <Compile Include="Infrastructure\IThreadPool.cs" />
     <Compile Include="Infrastructure\KestrelThread.cs" />
     <Compile Include="Infrastructure\LoggingThreadPool.cs" />
@@ -93,6 +119,7 @@
     <Compile Include="Infrastructure\MemoryPoolIterator.cs" />
     <Compile Include="Infrastructure\MemoryPoolIteratorExtensions.cs" />
     <Compile Include="Infrastructure\MemoryPoolSlab.cs" />
+    <Compile Include="Infrastructure\SystemClock.cs" />
     <Compile Include="Infrastructure\TaskUtilities.cs" />
     <Compile Include="ILoggerBase.cs" />
     <Compile Include="NetworkAddress.cs" />

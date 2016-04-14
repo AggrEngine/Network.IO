@@ -80,12 +80,17 @@ namespace UvTest
         {
             var log = new BaseLogger();
             log.Info(0, "test tcp start.............");
-
+            var app = new App(context=> 
+            {
+                log.Debug(0,"");
+                context.Write(Encoding.UTF8.GetBytes("SUCCESS"));
+                return TaskUtilities.CompletedTask;
+            });
             var listener = new AsyncNetworkHost(new ServiceContext
             {
                 FrameFactory = context =>
                 {
-                    return new Frame(context);
+                    return new Frame<NetworkContext>(app, context);
                 },
                 AppLifetime = new AppLifetime(log),
                 Log = log,
@@ -95,7 +100,8 @@ namespace UvTest
                     NoDelay = true,
                     ShutdownTimeout = new TimeSpan(0, 0, 1),
                     ConnectionFilter = new ConnectFilter(log, new LoggingConnectionFilter(log, new NoOpConnectionFilter()))
-                }
+                },
+                DateHeaderValueManager = new DateHeaderValueManager()
             });
             listener.Start(1);
             //var started = listener.CreateServer(new NetworkAddress() {
@@ -141,4 +147,29 @@ namespace UvTest
             _log.Info(0, "App stoped.");
         }
     }
+
+    public class App : IHttpApplication<NetworkContext>
+    {
+        private RequestDelegate _handle;
+        public App(RequestDelegate handle)
+        {
+            _handle = handle;
+        }
+
+        public NetworkContext CreateContext(IFeatureCollection contextFeatures)
+        {
+            return new NetworkContext(contextFeatures);
+        }
+
+        public void DisposeContext(NetworkContext context, Exception _applicationException)
+        {
+            
+        }
+
+        public Task ProcessRequestAsync(NetworkContext context)
+        {
+            return _handle(context);
+        }
+    }
+    
 }

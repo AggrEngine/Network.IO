@@ -6,11 +6,45 @@ using Microsoft.AspNetCore.Server.Kestrel.Infrastructure;
 using System;
 using System.Diagnostics;
 using System.Globalization;
+using Microsoft.AspNetCore.Server.Kestrel.Http;
 
 namespace AggrEngine.NetworkIO
 {
+
+    public class NetworkContext
+    {
+        private IFeatureCollection contextFeatures;
+
+        public NetworkContext(IFeatureCollection contextFeatures)
+        {
+            this.contextFeatures = contextFeatures;
+        }
+        public void Write(byte[] data)
+        {
+            Write(data, 0, data.Length);
+        }
+        public void Write(byte[] data, int offset, int count)
+        {
+            var context = contextFeatures as Frame<NetworkContext>;
+            if(context!= null)
+            {
+                context.ResponseBody.WriteAsync(data, offset, count);
+            }
+        }
+        
+    }
+
+    public class PoolingParameter
+    {
+        public int MaxPooledHeaders { get; internal set; }
+        public int MaxPooledStreams { get; internal set; }
+    }
     public class NetworkAddress
     {
+        public NetworkAddress()
+        {
+
+        }
         public string Scheme { get; set; }
         public string Host { get; set; }
         public string PathBase { get; set; }
@@ -25,6 +59,9 @@ namespace AggrEngine.NetworkIO
                 return Host.Substring(Constants.UnixPipeHostPrefix.Length - 1);
             }
         }
+
+        public PoolingParameter PoolingParameters { get; private set; } = new PoolingParameter();
+
         public override string ToString()
         {
             return Scheme.ToLowerInvariant() + "://" + Host.ToLowerInvariant() + ":" + Port.ToString(CultureInfo.InvariantCulture) + PathBase.ToLowerInvariant();
@@ -133,8 +170,4 @@ namespace AggrEngine.NetworkIO
         public TimeSpan ShutdownTimeout { get; set; }
     }
 
-    public interface IFeatureCollection
-    {
-
-    }
 }

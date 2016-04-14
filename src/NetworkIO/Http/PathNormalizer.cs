@@ -2,9 +2,7 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 
 using System;
-#if NOFIXED
 using System.Buffers;
-#endif
 using System.Text;
 
 namespace Microsoft.AspNetCore.Server.Kestrel.Http
@@ -20,7 +18,7 @@ namespace Microsoft.AspNetCore.Server.Kestrel.Http
 
             return path;
         }
-#if NOFIXED
+
         public static string RemoveDotSegments(string path)
         {
             if (ContainsDotSegments(path))
@@ -79,7 +77,7 @@ namespace Microsoft.AspNetCore.Server.Kestrel.Http
             return path;
         }
 
-#endif
+
 
         private unsafe static bool ContainsDotSegments(string path)
         {

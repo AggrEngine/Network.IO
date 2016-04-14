@@ -49,8 +49,8 @@ namespace AggrEngine.NetworkIO
 
         public IDisposable CreateServer(NetworkAddress address)
         {
+            _context.HttpComponentFactory = new HttpComponentFactory(address);
             var listeners = new List<IAsyncDisposable>();
-
             var usingPipes = address.IsUnixPipe;
 
             try

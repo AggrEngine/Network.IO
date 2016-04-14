@@ -22,6 +22,7 @@ namespace AggrEngine.NetworkIO
         protected int errorLevel = 5;
         protected int criticalLevel = 6;
         private int _logLevel;
+        private readonly object syncRoot = new object();
 
         public BaseLogger()
         {
@@ -43,11 +44,19 @@ namespace AggrEngine.NetworkIO
         public virtual void Trace(int eventId, object state, Func<object, string> formatter)
         {
             if (!IsEnabled(traceLevel)) return;
-            Console.ForegroundColor = ConsoleColor.Gray;
-            Console.WriteLine("{0} [TRACE]-{1} {2}", NowString, eventId, formatter(state));
-            Console.ResetColor();
+            WriteConsole("TRACE", eventId, formatter(state), ConsoleColor.Cyan);
         }
 
+        private void WriteConsole(string levelName, object title, string arg, ConsoleColor color)
+        {
+            lock (syncRoot)
+            {
+                Console.ForegroundColor = color;
+                Console.Write("{0} [{1}]-{2} ", NowString, levelName, title);
+                Console.ResetColor();
+                Console.WriteLine(arg);
+            }
+        }
         public void Debug(int eventId, object state)
         {
             Debug(eventId, state, arg => arg.ToString());
@@ -56,9 +65,7 @@ namespace AggrEngine.NetworkIO
         public virtual void Debug(int eventId, object state, Func<object, string> formatter)
         {
             if (!IsEnabled(debugLevel)) return;
-            Console.ForegroundColor = ConsoleColor.Green;
-            Console.WriteLine("{0} [DEBUG]-{1} {2}", NowString, eventId, formatter(state));
-            Console.ResetColor();
+            WriteConsole("DEBUG", eventId, formatter(state), ConsoleColor.Green);
         }
 
         public void Info(int eventId, object state)
@@ -69,9 +76,7 @@ namespace AggrEngine.NetworkIO
         public virtual void Info(int eventId, object state, Func<object, string> formatter)
         {
             if (!IsEnabled(infoLevel)) return;
-            Console.ForegroundColor = ConsoleColor.White;
-            Console.WriteLine("{0} [INFO]-{1} {2}", NowString, eventId, formatter(state));
-            Console.ResetColor();
+            WriteConsole("INFO", eventId, formatter(state), ConsoleColor.White);
         }
         public void Warning(int eventId, object state)
         {
@@ -86,9 +91,7 @@ namespace AggrEngine.NetworkIO
         public virtual void Warning(int eventId, object state, Exception exception, Func<object, Exception, string> formatter)
         {
             if (!IsEnabled(warningLevel)) return;
-            Console.ForegroundColor = ConsoleColor.Yellow;
-            Console.WriteLine("{0} [WARNING]-{1} {2}", NowString, eventId, formatter(state, exception));
-            Console.ResetColor();
+            WriteConsole("WARNING", eventId, formatter(state, exception), ConsoleColor.Yellow);
         }
         public void Error(int eventId, object state, Exception exception)
         {
@@ -98,9 +101,7 @@ namespace AggrEngine.NetworkIO
         public virtual void Error(int eventId, object state, Exception exception, Func<object, Exception, string> formatter)
         {
             if (!IsEnabled(errorLevel)) return;
-            Console.ForegroundColor = ConsoleColor.Red;
-            Console.WriteLine("{0} [ERROR]-{1} {2}", NowString, eventId, formatter(state, exception));
-            Console.ResetColor();
+            WriteConsole("ERROR", eventId, formatter(state, exception), ConsoleColor.Red);
         }
         public void Critical(int eventId, object state, Exception exception)
         {
@@ -110,9 +111,7 @@ namespace AggrEngine.NetworkIO
         public virtual void Critical(int eventId, object state, Exception exception, Func<object, Exception, string> formatter)
         {
             if (!IsEnabled(criticalLevel)) return;
-            Console.ForegroundColor = ConsoleColor.DarkMagenta;
-            Console.WriteLine("{0} [CRITICAL]-{1} {2}", NowString, eventId, formatter(state, exception));
-            Console.ResetColor();
+            WriteConsole("CRITICAL", eventId, formatter(state, exception), ConsoleColor.Magenta);
         }
 
     }
