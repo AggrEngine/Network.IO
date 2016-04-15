@@ -81,6 +81,7 @@ namespace UvTest
         private static void TestTcpListener()
         {
             var log = new BaseLogger();
+            log.LogLevel = 3; //show info
             log.Info(0, "test tcp start.............");
             var app = new App(context=> 
             {
@@ -108,21 +109,21 @@ namespace UvTest
                 DateHeaderValueManager = new DateHeaderValueManager()
             });
 
-            var testCertPath = Path.Combine(AppDomain.CurrentDomain.SetupInformation.ApplicationBase,"../../", "testCert.pfx");
-            if (File.Exists(testCertPath))
-            {
-                listener.UseKestrelHttps(new X509Certificate2(testCertPath, "testPassword"));
-            }
-            else
-            {
-                log.Error(0, string.Format("Could not find certificate at '{0}'. HTTPS is not enabled.", testCertPath), new Exception());
-            }
+            //var testCertPath = Path.Combine(AppDomain.CurrentDomain.SetupInformation.ApplicationBase,"../../", "testCert.pfx");
+            //if (File.Exists(testCertPath))
+            //{
+            //    listener.UseKestrelHttps(new X509Certificate2(testCertPath, "testPassword"));
+            //}
+            //else
+            //{
+            //    log.Error(0, string.Format("Could not find certificate at '{0}'. HTTPS is not enabled.", testCertPath), new Exception());
+            //}
             listener.Start(1);
             //var started = listener.CreateServer(new NetworkAddress() {
             //    Host = "127.0.0.1",
             //    Port = 5300
             //});
-            var started = listener.CreateServer(NetworkAddress.FromUrl("https://127.0.0.1:5300/"));
+            var started = listener.CreateServer(NetworkAddress.FromUrl("http://192.168.213.106:5300/"));
             Console.Write("Iput enter is exit.");
             Console.ReadLine();
             started.Dispose();

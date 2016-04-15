@@ -49,6 +49,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+    <None Include="loadtest.md" />
     <None Include="testCert.pfx" />
   </ItemGroup>
   <ItemGroup>
