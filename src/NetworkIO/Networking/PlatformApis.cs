@@ -3,9 +3,7 @@
 
 using System;
 using System.Runtime.InteropServices;
-#if NOFIXED
 using Microsoft.Extensions.PlatformAbstractions;
-#endif
 
 namespace Microsoft.AspNetCore.Server.Kestrel.Networking
 {
@@ -27,9 +25,8 @@ namespace Microsoft.AspNetCore.Server.Kestrel.Networking
                 IsDarwin = string.Equals(GetUname(), "Darwin", StringComparison.Ordinal);
             }
 #endif
-#if NOFIXED
+
             IsMono = PlatformServices.Default.Runtime.RuntimeType == "Mono";
-#endif
         }
 
         public static bool IsWindows { get; }
