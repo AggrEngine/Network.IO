@@ -69,10 +69,10 @@ namespace Microsoft.AspNetCore.Server.Kestrel.Http
         public Frame(ConnectionContext context)
             : base(context)
         {
-            _pathBase = context.ServerAddress.PathBase;
-
             FrameControl = this;
             Reset();
+            _pathBase = context.ServerAddress.PathBase;
+            Scheme = context.ServerAddress.Scheme;
         }
 
         public string Scheme { get; set; }
@@ -417,7 +417,7 @@ namespace Microsoft.AspNetCore.Server.Kestrel.Http
             SocketOutput.Write(_emptyData);
         }
 
-        public async Task FlushAsync(CancellationToken cancellationToken)
+        public async Task FlushAsync(CancellationToken cancellationToken = default(CancellationToken))
         {
             await ProduceStartAndFireOnStarting();
             await SocketOutput.WriteAsync(_emptyData, cancellationToken: cancellationToken);

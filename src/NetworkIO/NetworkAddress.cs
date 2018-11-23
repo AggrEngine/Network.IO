@@ -6,6 +6,8 @@ using Microsoft.AspNetCore.Server.Kestrel.Infrastructure;
 using System;
 using System.Diagnostics;
 using System.Globalization;
+using System.Net;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Server.Kestrel.Http;
 
 namespace AggrEngine.NetworkIO
@@ -13,25 +15,66 @@ namespace AggrEngine.NetworkIO
 
     public class NetworkContext
     {
-        private IFeatureCollection contextFeatures;
+        private Frame<NetworkContext> context;
 
         public NetworkContext(IFeatureCollection contextFeatures)
         {
-            this.contextFeatures = contextFeatures;
+            this.context = contextFeatures as Frame<NetworkContext>;
         }
+
+        public IHeaderDictionary RequestHeaders => context?.RequestHeaders;
+
+        public IHeaderDictionary ResponseHeaders => context?.ResponseHeaders;
+
+        public string Scheme => context?.Scheme;
+        public string Method => context?.Method;
+        public string RequestUri => context?.RequestUri;
+        public string PathBase => context?.PathBase;
+        public string Path => context?.Path;
+        public string QueryString => context?.QueryString;
+        public string HttpVersion => context?.HttpVersion;
+
+        public string SessionId => context?.ConnectionId;
+
+        public IPEndPoint RemoteAddress => context?.RemoteEndPoint;
+        public IPEndPoint LocalAddress => context?.LocalEndPoint;
+
+
+        public void SetStatus(int code, string message)
+        {
+            if (context != null)
+            {
+                context.StatusCode = code;
+                context.ReasonPhrase = message ?? string.Empty;
+            }
+        }
+
+        public void Flush()
+        {
+            context?.Flush();
+        }
+
+        public void FlushAsync()
+        {
+            context?.FlushAsync();
+        }
+
+
         public void Write(byte[] data)
         {
             Write(data, 0, data.Length);
         }
+
         public void Write(byte[] data, int offset, int count)
         {
-            var context = contextFeatures as Frame<NetworkContext>;
-            if(context!= null)
-            {
-                context.ResponseBody.WriteAsync(data, offset, count);
-            }
+            context?.ResponseBody.Write(data, offset, count);
         }
-        
+
+        public Task WriteAsync(byte[] data, int offset, int count)
+        {
+            return context?.ResponseBody.WriteAsync(data, offset, count);
+        }
+
     }
 
     public class PoolingParameter
@@ -157,7 +200,7 @@ namespace AggrEngine.NetworkIO
             {
                 serverAddress.PathBase = url.Substring(pathDelimiterEnd);
             }
-            
+
             return serverAddress;
         }
     }

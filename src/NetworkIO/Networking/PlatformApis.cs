@@ -3,7 +3,7 @@
 
 using System;
 using System.Runtime.InteropServices;
-using Microsoft.Extensions.PlatformAbstractions;
+//using Microsoft.Extensions.PlatformAbstractions;
 
 namespace Microsoft.AspNetCore.Server.Kestrel.Networking
 {
@@ -26,7 +26,7 @@ namespace Microsoft.AspNetCore.Server.Kestrel.Networking
             }
 #endif
 
-            IsMono = PlatformServices.Default.Runtime.RuntimeType == "Mono";
+            //IsMono = PlatformServices.Default.Runtime.RuntimeType == "Mono";
         }
 
         public static bool IsWindows { get; }

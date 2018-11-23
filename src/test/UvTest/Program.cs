@@ -83,14 +83,16 @@ namespace UvTest
             var log = new BaseLogger();
             log.LogLevel = 3; //show info
             log.Info(0, "test tcp start.............");
-            var app = new App(context=> 
+            var app = new App(context =>
             {
-                log.Debug(0,"");
-                context.Write(Encoding.UTF8.GetBytes("SUCCESS"));
+                log.Debug(0, "");
+                context.SetStatus(404, "no permission");
+                context.Write(Encoding.UTF8.GetBytes(" "));
+                context.Flush();
                 return TaskUtilities.CompletedTask;
             });
 
-           
+
             var listener = new AsyncNetworkHost(new ServiceContext
             {
                 FrameFactory = context =>
@@ -123,7 +125,7 @@ namespace UvTest
             //    Host = "127.0.0.1",
             //    Port = 5300
             //});
-            var started = listener.CreateServer(NetworkAddress.FromUrl("http://192.168.213.106:5300/"));
+            var started = listener.CreateServer(NetworkAddress.FromUrl("http://127.10.0.1:5300/"));
             Console.Write("Iput enter is exit.");
             Console.ReadLine();
             started.Dispose();
@@ -178,7 +180,7 @@ namespace UvTest
 
         public void DisposeContext(NetworkContext context, Exception _applicationException)
         {
-            
+
         }
 
         public Task ProcessRequestAsync(NetworkContext context)
@@ -186,5 +188,5 @@ namespace UvTest
             return _handle(context);
         }
     }
-    
+
 }
